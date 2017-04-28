@@ -20,7 +20,7 @@ coverage
 .grunt
 
 # Compiled files
-lib
+# lib
 
 # node-waf configuration
 .lock-wscript
