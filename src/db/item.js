@@ -44,6 +44,11 @@ const itemSchema = new mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+
+  updated: {
+    type: Date,
+    default: Date.now
   }
 }, { strict: false });
 
@@ -107,6 +112,14 @@ Object.assign(itemSchema.statics, {
 itemSchema.index({ name: -1 });
 itemSchema.index({ provider: -1 });
 itemSchema.index({ 'providers.route': -1 });
+
+/**
+ * Hooks
+ */
+itemSchema.pre('save', function (next) {
+  this.updatd = new Date()
+  next()
+})
 
 /**
  * @providesModule Item
