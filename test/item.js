@@ -1,5 +1,6 @@
 /* eslint-disable import/imports-first */
 import './testenv';
+import { expect } from 'chai';
 import Item from '../src/db/item';
 import createMongoConnection from '../src/db/connection';
 import dummyItem from './mocks/profile.json';
@@ -16,8 +17,10 @@ describe('Item', function () {
       await Item.remove();
     });
 
-    it('should create a new item', (done) => {
-      Item.create(dummyItem, done);
+    it('should create a new item', async () => {
+      const item = Item.create(dummyItem);
+      expect(item.created).exists;
+      expect(item.updated).exists;
     });
 
     it('should delete a item', (done) => {
