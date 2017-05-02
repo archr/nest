@@ -108,4 +108,10 @@ describe('Nest', () => {
     engine.start();
     expect(engine.running).to.equal(true);
   });
+
+  it('should expose the db', () => {
+    const engine = new Nest(mockModules);
+    expect(engine.db.Queue.find).to.be.a('function');
+    expect(engine.db.Item.find).to.be.a('function');
+  });
 });

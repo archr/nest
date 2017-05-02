@@ -5,6 +5,7 @@ import { EventEmitter } from 'events';
 import engineConfig from '../config/engine';
 import createWorker from './worker';
 import Queue from './db/queue';
+import Item from './db/item';
 import createRoute from './route';
 import createMongoConnection from './db/connection';
 import logger from './logger';
@@ -34,6 +35,7 @@ export default class Nest extends EventEmitter {
     this.routes = isArray(routes) ? routes.map(createRoute) : [];
     this.connection = createMongoConnection(mongo);
     this.workersAmount = isNumber(workers) ? workers : engineConfig.workers;
+    this.db = { Queue, Item };
   }
 
   /**
