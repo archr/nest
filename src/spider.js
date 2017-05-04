@@ -6,7 +6,6 @@ import request from 'request-promise';
 import phantomConfig from '../config/phantom';
 import createPage from './page';
 import logger from './logger';
-import Queue from './db/queue';
 
 const debug = logger.debug('nest:spider');
 const { FORCE_DYNAMIC } = process.env;
@@ -21,8 +20,7 @@ const MAX_RETRY_COUNT = 3;
 export const createSpider = function () {
   return Object.assign(Object.create(spiderProto), {
     running: true,
-    phantom: null,
-    Queue
+    phantom: null
   });
 };
 
