@@ -7,6 +7,7 @@ import phantomConfig from '../config/phantom';
 import createPage from './page';
 import logger from './logger';
 import Queue from './db/queue';
+import Item from './db/item';
 
 const debug = logger.debug('nest:spider');
 const { FORCE_DYNAMIC } = process.env;
@@ -22,7 +23,8 @@ export const createSpider = function () {
   return Object.assign(Object.create(spiderProto), {
     running: true,
     phantom: null,
-    Queue
+    Queue,
+    Item
   });
 };
 
