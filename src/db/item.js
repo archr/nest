@@ -92,8 +92,8 @@ Object.assign(itemSchema.statics, {
     const existItem = await Item.findOne({ key: item.key });
 
     if (existItem) {
-      Object.assign(existItem, item);
-      await existItem.save();
+      item.updated = new Date();
+      await this.update({ key: item.key }, { $set: item }).exec();
 
       debug(`'Updated item:' ${item.key}`);
       return 'updated';
