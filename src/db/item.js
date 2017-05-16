@@ -117,9 +117,9 @@ itemSchema.index({ 'providers.route': -1 });
  * Hooks
  */
 itemSchema.pre('save', function (next) {
-  this.updatd = new Date()
-  next()
-})
+  this.updated = new Date();
+  next();
+});
 
 /**
  * @providesModule Item
