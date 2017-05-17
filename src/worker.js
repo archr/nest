@@ -10,7 +10,14 @@ import logger from './logger';
 
 const debug = logger.debug('nest:worker');
 const emitterProto = EventEmitter.prototype;
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const timeout = (timeout, promise) =>
+  Promise.race([
+    promise,
+    new Promise((resolve, reject) => {
+      setTimeout(() => reject(new Error('Timeout')), timeout);
+    })
+  ]);
 const { assign, create } = Object;
 
 /**
@@ -43,7 +50,6 @@ export default function createWorker(engine) {
 }
 
 const workerProto = {
-
   /**
    * Start this worker.
    *
@@ -64,7 +70,7 @@ const workerProto = {
 
     this.running = true;
 
-    return await new Promise((resolve) => {
+    return await new Promise(resolve => {
       this.once('job:assigned', (job, worker) => {
         if (worker === this) {
           debug(`Worker ${this.id} started`);
@@ -110,11 +116,9 @@ const workerProto = {
       // process the job
       try {
         this.emit('job:start', job, this);
-        job = await this.startJob(job);
+        job = await timeout(60000 * 5, this.startJob(job));
 
-        assert(isObject(job) && isObject(job.stats),
-          'New job state is not valid');
-
+        assert(isObject(job) && isObject(job.stats), 'New job state is not valid');
       } catch (err) {
         if (isObject(err)) {
           if (err.statusCode) {
@@ -128,9 +132,10 @@ const workerProto = {
 
       debug(
         `Job finished: ${job.routeId}. ` +
-        `${job.stats.items} items created. ` +
-        `${job.stats.updated} items updated. ` +
-        `${job.stats.spawned} jobs created.`);
+          `${job.stats.items} items created. ` +
+          `${job.stats.updated} items updated. ` +
+          `${job.stats.spawned} jobs created.`
+      );
 
       // check if should reinitialize
       try {
@@ -263,21 +268,23 @@ const workerProto = {
 
     debug('Spawning jobs');
 
-    const newJobs = await Promise.all(jobs.map((op) => {
-      const { routeId, query } = op;
-      const targetRoute = find(routes, { key: routeId });
+    const newJobs = await Promise.all(
+      jobs.map(op => {
+        const { routeId, query } = op;
+        const targetRoute = find(routes, { key: routeId });
 
-      if (!targetRoute) {
-        logger.warn(`[spawnJobs]: Route ${routeId} does not exist`);
-        return Promise.resolve();
-      }
+        if (!targetRoute) {
+          logger.warn(`[spawnJobs]: Route ${routeId} does not exist`);
+          return Promise.resolve();
+        }
 
-      // Create a new job
-      return Queue.createJob(targetRoute.key, {
-        priority: targetRoute.priority,
-        query
-      });
-    }));
+        // Create a new job
+        return Queue.createJob(targetRoute.key, {
+          priority: targetRoute.priority,
+          query
+        });
+      })
+    );
 
     debug(`Jobs spawned: ${newJobs.length} jobs`);
 
@@ -300,7 +307,7 @@ const workerProto = {
 
     debug('Stopping worker.');
 
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       this.once('worker:stopped', () => {
         debug('Worker stopped.');
         resolve();
