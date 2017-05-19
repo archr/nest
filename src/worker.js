@@ -242,6 +242,7 @@ const workerProto = {
 
     // Job finished
     if (state.finished || !this.running) {
+      this.spider.stopPhantom();
       return job;
     }
 
