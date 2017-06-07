@@ -61,6 +61,9 @@ export default function createRoute(route) {
     retryCount: route.retryCount,
 
     // routes with higher priority will be processed first by the workers
-    priority: isNaN(route.priority) ? 50 : parseInt(route.priority, 10)
+    priority: isNaN(route.priority) ? 50 : parseInt(route.priority, 10),
+
+    // use phantom
+    dynamic: route.dynamic
   };
 }
