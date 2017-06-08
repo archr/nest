@@ -71,8 +71,12 @@ Object.assign(itemSchema.statics, {
     };
 
     const promises = items.map(async (item) => {
-      const op = await Item.upsert(item);
-      stats[op]++;
+      try {
+        const op = await Item.upsert(item);
+        stats[op]++;
+      } catch (e) {
+        logger.error(e);
+      }
     });
 
     await Promise.all(promises);
