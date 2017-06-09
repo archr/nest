@@ -10,7 +10,7 @@ import createRoute from './route';
 import createMongoConnection from './db/connection';
 import logger from './logger';
 
-const debug = require('debug')('nest');
+const debug = require('debug')('nest:nest');
 
 /**
  * Creates a group of workers, and provides a worker loop
