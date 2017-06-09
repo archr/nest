@@ -64,6 +64,9 @@ export default function createRoute(route) {
     priority: isNaN(route.priority) ? 50 : parseInt(route.priority, 10),
 
     // use phantom
-    dynamic: route.dynamic
+    dynamic: route.dynamic,
+
+    // empty request
+    fake: route.fake
   };
 }

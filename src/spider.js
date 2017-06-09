@@ -41,6 +41,10 @@ export const spiderProto = {
 
     this.url = url;
 
+    if (options.fake) {
+      return createPage('{}', { url: this.url });
+    }
+
     const isDynamic = options.dynamic || FORCE_DYNAMIC;
     const getPage = isDynamic ? this.openDynamic : this.openStatic;
 
@@ -164,7 +168,7 @@ export const spiderProto = {
 
     // open the page
     try {
-      page = await this.open(url, { dynamic: route.dynamic });
+      page = await this.open(url, { dynamic: route.dynamic, fake: route.fake });
 
       // manually check if the page has been blocked
       if (isFunction(route.checkStatus)) {
