@@ -137,18 +137,6 @@ const workerProto = {
           `${job.stats.spawned} jobs created.`
       );
 
-      // check if should reinitialize
-      try {
-        if (job.shouldReinitialize) {
-          debug('Worker reinitializing');
-          await this.initialize();
-        }
-      } catch (err) {
-        logger.error(err);
-        this.stop();
-        continue;
-      }
-
       this.job = null;
       this.route = null;
     }
