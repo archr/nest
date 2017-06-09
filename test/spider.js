@@ -32,13 +32,6 @@ describe('Spider', function () {
     expect(globalSpider.phantom).to.equal(null);
   });
 
-  it('should open a fake page', async () => {
-    const spider = createSpider();
-
-    const page = await spider.open('fake', { fake: true });
-    expect(page.valid).equal(true);
-  });
-
   it('should scrape hackernews', async () => {
     const spider = createSpider();
     const url = 'https://news.ycombinator.com';
