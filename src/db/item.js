@@ -93,7 +93,7 @@ Object.assign(itemSchema.statics, {
     debug(`Upsert: Finding Item ${item.key}`);
 
     const Item = this;
-    const existItem = await Item.findOne({ key: item.key });
+    const existItem = await Item.findOne({ key: item.key.toLowerCase() });
 
     if (existItem) {
       item.updated = new Date();
