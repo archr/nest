@@ -3,6 +3,8 @@ import createError from 'http-errors';
 import { isString, isObject, isFunction } from 'lodash';
 import assert from 'assert';
 import logger from './logger';
+import Queue from './db/queue';
+import Item from './db/item';
 
 /**
  * Creates a new page.
@@ -30,6 +32,11 @@ export default function createPage(data, meta) {
 }
 
 const pageProto = {
+  // Added db
+  db: {
+    Item,
+    Queue
+  },
 
   /**
    * Runs the provided function in the page's context;
