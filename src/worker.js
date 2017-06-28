@@ -127,6 +127,10 @@ const workerProto = {
             logger.error(err);
           }
         }
+
+        this.job = null;
+        this.route = null;
+
         continue;
       }
 
